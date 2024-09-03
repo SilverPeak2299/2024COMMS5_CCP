@@ -5,6 +5,9 @@ import org.json.simple.parser.JSONParser;
 
 /**
  * jsonHandler
+ * 
+ * - Tool for working with Json inputs should be static but the json library throws a fit.
+ * should probably make this a singleton
  */
 public class jsonHandler {
     String id;
@@ -20,7 +23,7 @@ public class jsonHandler {
     return "";
    }
 
-
+    // java throws a fit cause the JSONobject is an extension of hashmap
     @SuppressWarnings("unchecked")
     public String generateMCPCommand(String cmd) {
         JSONObject command = new JSONObject();
@@ -33,6 +36,7 @@ public class jsonHandler {
         return command.toJSONString();
     }
 
+    // java throws a fit cause the JSONobject is an extension of hashmap
     @SuppressWarnings("unchecked")
     public String generateESPCommand(String cmd) {
         JSONObject command = new JSONObject();

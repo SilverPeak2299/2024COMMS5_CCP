@@ -21,6 +21,8 @@ public class connectionManager {
     void inialiseConnections () {
     // initalising esp connection
     while (!espCon.inialiseConnection());
+
+    if (mcpCon.inialiseConnection()) {}
     
     
 

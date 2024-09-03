@@ -31,6 +31,7 @@ public class messageQueue {
             }
 
             current.setNext(null);
+            size = 10;
         }
     }
 

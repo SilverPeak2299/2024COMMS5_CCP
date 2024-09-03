@@ -1,0 +1,6 @@
+{
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "c:\\Users\\Dell\\Documents\\Uni\\ENGG3000\\2024COMMS5_CCP\\CCP_Project\\lib\\json-simple-1.1.1.jar"
+    ]
+}
