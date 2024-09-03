@@ -8,9 +8,14 @@ public class connectionManager {
     espConnection espCon;
     mcpConnection mcpCon;
 
+    jsonHandler JsonHandler;
+
     connectionManager(int id) {
         this.id = id;
-        espCon = new espConnection(id);
+        JsonHandler = new jsonHandler(id);
+
+        espCon = new espConnection(id, JsonHandler);
+        mcpCon = new mcpConnection(JsonHandler);
     }
 
     void inialiseConnections () {

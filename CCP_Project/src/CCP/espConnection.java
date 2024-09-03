@@ -11,9 +11,13 @@ public class espConnection{
     DatagramPacket recivePacket;
     DatagramPacket sendPacket;
 
-    espConnection(int id) {
+    jsonHandler JsonHandler;
+
+    espConnection(int id, jsonHandler JsonHandler) {
         port = 3000 + id;
         esp32IP = "10.20.30.1" + id;
+        
+        this.JsonHandler = JsonHandler;
     }
 
 
