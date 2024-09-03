@@ -14,6 +14,7 @@ public class mcpConnection{
 
     DatagramPacket recivePacket;
     DatagramPacket sendPacket;
+    messageQueue messages;
 
     jsonHandler JsonHandler;
 
@@ -27,9 +28,13 @@ public class mcpConnection{
     boolean inialiseConnection() {
         try {
             clientSocket = new DatagramSocket(mcpPort);
-            sendMsg(JsonHandler.generateCommand("CCIN"));
+            sendMsg(JsonHandler.generateMCPCommand("CCIN"));
+            reciveMsg();
 
-            //TODO check for ACK in protocol then return true / false
+            if (JsonHandler.searchJSON(messages.peakMessage().getMsg(), "message").equals("AKIN"))
+                return true;
+
+            return false;
 
         } catch (SocketException e) {
             // TODO: handle exception
@@ -40,17 +45,18 @@ public class mcpConnection{
 
 
 
-    public String reciveMsg() {
+    public void reciveMsg() {
         byte [] recive = new byte[999];
 
         try {
             recivePacket = new DatagramPacket(recive, recive.length);
             clientSocket.receive(recivePacket);
 
-            return new String(recivePacket.getData(), 0, recivePacket.getLength());
+            String msg = new String(recivePacket.getData(), 0, recivePacket.getLength());
+            messages.addMessage(JsonHandler.convertString(msg));
+
         } catch (Exception e) {
             // TODO: Log issue and stuffs
-            return "";
         }
     }
 

@@ -1,15 +1,18 @@
 package CCP;
 
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 /**
  * jsonHandler
  */
 public class jsonHandler {
     String id;
+    JSONParser parser;
 
     jsonHandler(int id) {
         this.id = "BR"+ id;
+        parser = new JSONParser();
     }
 
    private String timestamp() {
@@ -18,15 +21,38 @@ public class jsonHandler {
    }
 
 
-@SuppressWarnings("unchecked")
-public String generateCommand(String cmd) {
-    JSONObject command = new JSONObject();
+    @SuppressWarnings("unchecked")
+    public String generateMCPCommand(String cmd) {
+        JSONObject command = new JSONObject();
     
-    command.put("client_type", "ccp");
-    command.put("message", cmd);
-    command.put("client_id", id);
-    command.put("timestamp", timestamp());
+        command.put("client_type", "ccp");
+        command.put("message", cmd);
+        command.put("client_id", id);
+        command.put("timestamp", timestamp());
 
-    return command.toJSONString();
-   }
+        return command.toJSONString();
+    }
+
+    @SuppressWarnings("unchecked")
+    public String generateESPCommand(String cmd) {
+        JSONObject command = new JSONObject();
+        command.put("message", cmd);
+
+        return command.toJSONString();
+    }
+
+    JSONObject convertString(String msg) {
+        try {
+            return (JSONObject) parser.parse(msg);
+
+        } catch (Exception e) {
+            return null;
+            // TODO: handle exception
+        }
+    }
+
+    String searchJSON(JSONObject msg, String key) { // this type casting might give some shit idk
+        return (String) msg.get(key);
+    }
+
 }
