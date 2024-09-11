@@ -4,13 +4,13 @@
         {
             "label": "send to br26",
             "type": "shell",
-            "command": "C:\\Users\\Dell\\Documents\\Uni\\ENGG3000\\2024COMMS5_CCP\\CCP_Project\\transferFiles.ps1",
+            "command": "C:\\Users\\Dell\\Documents\\Uni\\ENGG3000\\2024COMMS5_CCP\\CCP_Project\\tools\\transferFiles.ps1",
             "args": ["br26"]
         },
         {
             "label": "send to br27",
             "type": "shell",
-            "command": "C:\\Users\\Dell\\Documents\\Uni\\ENGG3000\\2024COMMS5_CCP\\CCP_Project\\transferFiles.ps1",
+            "command": "C:\\Users\\Dell\\Documents\\Uni\\ENGG3000\\2024COMMS5_CCP\\CCP_Project\\tools\\transferFiles.ps1",
             "args": ["br27"]
    
         }
