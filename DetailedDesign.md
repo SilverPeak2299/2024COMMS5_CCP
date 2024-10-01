@@ -21,14 +21,13 @@ classDiagram
     }
 
     %% Parent Connection Class
-    class Connection {
-        +String protocol = "UDP"
+    class Connection Manager {
         +String connectionState
         +String lastMessageTime
-        +initializeConnection()
+        +initializeConnections()
         +sendHeartbeat()
         +receiveHeartbeat()
-        +closeConnection()
+        +closeConnections()
     }
 
     %% ESP Connection Subclass
@@ -82,12 +81,12 @@ classDiagram
     }
 
     %% Data transmission and reception
-    class DataTransmission {
-        +String transmissionStatus
-        +sendData()
-        +receiveData()
-        +checkTransmissionErrors()
-        +transmitDataToConnection()
+    class Json Handler {
+        +String ID
+        +generateMCPCommand()
+	+generateCCPCommand()
+        +convertString()
+        +parseJSON()
     }
 
     %% Relationships and dependencies
@@ -95,18 +94,16 @@ classDiagram
     CCP --> MotorControl : controls
     CCP --> ErrorHandling : manages
     CCP --> SensorManagement : manages
-    DataProcessing --> DataTransmission : sends data to
-    DataTransmission --> Connection : uses
-    Connection --> ESPConnection : manages
-    Connection --> MCPConnection : manages
+    DataProcessing --> Json Handler : sends data to
+    Json Handler --> Connection Manager : uses
+    Connection Manager --> ESPConnection : manages
+    Connection Manager --> MCPConnection : manages
 
     %% Additional dependencies
-    DataTransmission --> ESPConnection : through Connection
-    DataTransmission --> MCPConnection : through Connection
-    DataProcessing --> MCPConnection : sends data to
+    DataProcessing --> SensorManagement : sends data to
     MotorControl --> DataProcessing : updates based on
-    ErrorHandling --> DataTransmission : monitors for errors
-    SensorManagement --> DataTransmission : sends data through
+    ErrorHandling --> Connection Manager : monitors for errors
+    SensorManagement --> Connection Manager : sends data through
 
 ```
 
