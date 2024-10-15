@@ -24,30 +24,52 @@ public class mcpConnection{
 
     String mcpIP = "10.20.30.1";
     int mcpPort = 2001;
+
+    Boolean connected = false;
+    int msgsWithoutReply = 0;
     
     mcpConnection(jsonHandler JsonHandler) {
         this.JsonHandler = JsonHandler;
     }
 
-    boolean inialiseConnection() {
+    void inialiseConnection() {
         Random rand = new Random();
-        JsonHandler.setMcpSeq(1000 + rand.nextInt(29000));
+        Long lastMsg = System.currentTimeMillis();
+        
 
-        try {
-            clientSocket = new DatagramSocket(mcpPort);
-            sendMsg(JsonHandler.generateMCPCommand("CCIN"));
-            reciveMsg();
+        do {
+            JsonHandler.setMcpSeq(1000 + rand.nextInt(29000)); // setting new seq number for new connection attempt
+            Long currTime = System.currentTimeMillis();
 
-            if (JsonHandler.searchJSON(messages.peakMessage().getMsg(), "message").equals("AKIN"))
-                return true;
+            try {
+                if (currTime - lastMsg > 2000) { // execute every 2 seconds
+                    clientSocket = new DatagramSocket(mcpPort);
+                    sendMsg(JsonHandler.generateMCPCommand("CCIN"));
+                    lastMsg = System.currentTimeMillis();
+                }
+    
+                reciveMsg();
+                if (jsonHandler.searchJSON(messages.peakMessage().getMsg(), "message").equals("AKIN"))
+                    connected = true;
+    
+            } catch (SocketException e) {
+                // TODO: handle exception
+                System.out.println("wating for mcp response");
+            }
+    
+        } while (!isConnected());
 
-            return false;
 
-        } catch (SocketException e) {
-            // TODO: handle exception
-            return false;
-        }
     }
+
+    boolean isConnected() {
+        if (msgsWithoutReply >= 3) {
+            connected = false;
+        }
+
+        return connected;
+    }
+
 
 
 
@@ -62,6 +84,8 @@ public class mcpConnection{
             String msg = new String(recivePacket.getData(), 0, recivePacket.getLength());
             messages.addMessage(JsonHandler.convertString(msg));
 
+            msgsWithoutReply = 0; // resetting message counter
+
         } catch (Exception e) {
             // TODO: Log issue and stuffs
         }
@@ -72,6 +96,8 @@ public class mcpConnection{
             byte[] info = msg.getBytes();
             sendPacket = new DatagramPacket(info, info.length, InetAddress.getByName(mcpIP),mcpPort);
             clientSocket.send(sendPacket);
+
+            msgsWithoutReply += 1; // Incrementing message count
 
         } catch (IOException e) {
             // TODO: handle exception

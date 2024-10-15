@@ -35,17 +35,26 @@ public class messageQueue {
         }
     }
 
+    int lastSeqNO() {
+        return root.seqNo;
+    }
+
+
     message peakMessage() {
         return root;
     }
+
 
     class message {
         private JSONObject msg;
         private message next;
 
+        int seqNo;
+
         message(JSONObject msg) {
             this.msg = msg;
             next = null;
+            seqNo = Integer.parseInt(jsonHandler.searchJSON(msg, "sequence_number"));
         }
 
         message(JSONObject msg, message next) {

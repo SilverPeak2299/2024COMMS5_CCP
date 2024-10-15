@@ -11,6 +11,10 @@ public class espConnection{
     String esp32IP;
     int espSeq;
 
+    boolean connection;
+    int msgsWithoutReply = 0;
+
+
     DatagramPacket recivePacket;
     DatagramPacket sendPacket;
 
@@ -33,9 +37,9 @@ public class espConnection{
                 serverSocket = new DatagramSocket(port);
                 reciveMsg();
 
-                espSeq = Integer.parseInt(JsonHandler.searchJSON(messages.peakMessage().getMsg(), "sequence_number"));
+                espSeq = Integer.parseInt(jsonHandler.searchJSON(messages.peakMessage().getMsg(), "sequence_number"));
     
-                if (JsonHandler.searchJSON(messages.peakMessage().getMsg(), "message").equals("INIT")) {
+                if (jsonHandler.searchJSON(messages.peakMessage().getMsg(), "message").equals("INIT")) {
                     sendMsg(JsonHandler.generateESPCommand("INIT"));
                 }
 
@@ -54,7 +58,9 @@ public class espConnection{
 
 
     public boolean isConnected() {
-        //TODO I wan my notebook
+        if (msgsWithoutReply >= 3) { connection = false; }
+
+        return connection;
     }
 
     public void reciveMsg() {
@@ -67,8 +73,10 @@ public class espConnection{
             String msg = new String(recivePacket.getData(), 0, recivePacket.getLength());
             messages.addMessage(JsonHandler.convertString(msg));
 
+            //TODO: Check Data is valid
+            msgsWithoutReply = 0;
+
         } catch (Exception e) {
-            // TODO: Log issue and stuffs
         }
     }
 
@@ -77,9 +85,10 @@ public class espConnection{
             byte[] info = msg.getBytes();
             sendPacket = new DatagramPacket(info, info.length, InetAddress.getByName(esp32IP), port);
             serverSocket.send(sendPacket);
+            msgsWithoutReply += 1;
 
         } catch (IOException e) {
-            // TODO: handle exception
+            System.out.println("message failed to send");
         }
     }
 }

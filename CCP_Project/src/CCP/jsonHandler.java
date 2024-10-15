@@ -58,7 +58,7 @@ public class jsonHandler {
         }
     }
 
-    String searchJSON(JSONObject msg, String key) { // this type casting might give some shit idk
+    static String searchJSON(JSONObject msg, String key) { // this type casting might give some shit idk
         return (String) msg.get(key);
     }
 

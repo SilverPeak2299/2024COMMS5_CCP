@@ -19,12 +19,26 @@ public class connectionManager {
         mcpCon = new mcpConnection(JsonHandler);
     }
 
-    void inialiseConnections () {
-    // initalising esp connection
-    while (!espCon.inialiseConnection());
+    void enforeceConnection () {
+    // Checking conenctions
+        if (!espCon.isConnected()) { espCon.inialiseConnection(); }
 
-    if (mcpCon.inialiseConnection()) {}
-    
-
+        if (!mcpCon.isConnected()) { mcpCon.inialiseConnection(); }
     }
+
+    //TODO: check if there actually exists a message
+    boolean checkMcpMessages() {
+        mcpCon.reciveMsg();
+        return true;
+    }
+
+    messageQueue getMcpMessages() {
+        return mcpCon.messages;
+    }
+
+    messageQueue getEspMessages() {
+        return espCon.messages;
+    }
+
+
 }
