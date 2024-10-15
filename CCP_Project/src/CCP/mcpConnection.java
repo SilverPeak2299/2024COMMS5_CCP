@@ -6,6 +6,8 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 
+import java.util.Random;
+
 /**
  * mcpConnection
  */
@@ -14,7 +16,9 @@ public class mcpConnection{
 
     DatagramPacket recivePacket;
     DatagramPacket sendPacket;
+
     messageQueue messages;
+    
 
     jsonHandler JsonHandler;
 
@@ -26,6 +30,9 @@ public class mcpConnection{
     }
 
     boolean inialiseConnection() {
+        Random rand = new Random();
+        JsonHandler.setMcpSeq(1000 + rand.nextInt(29000));
+
         try {
             clientSocket = new DatagramSocket(mcpPort);
             sendMsg(JsonHandler.generateMCPCommand("CCIN"));

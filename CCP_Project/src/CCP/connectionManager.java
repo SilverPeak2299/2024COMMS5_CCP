@@ -10,6 +10,7 @@ public class connectionManager {
 
     jsonHandler JsonHandler;
 
+
     connectionManager(int id) {
         this.id = id;
         JsonHandler = new jsonHandler(id);
@@ -23,7 +24,6 @@ public class connectionManager {
     while (!espCon.inialiseConnection());
 
     if (mcpCon.inialiseConnection()) {}
-    
     
 
     }

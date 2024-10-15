@@ -1,12 +1,15 @@
 package CCP;
 import java.io.*;
 import java.net.*;
+import java.util.Random;
 
 
 public class espConnection{
     private DatagramSocket serverSocket;
     int port;
+
     String esp32IP;
+    int espSeq;
 
     DatagramPacket recivePacket;
     DatagramPacket sendPacket;
@@ -23,29 +26,35 @@ public class espConnection{
     }
 
 
-    public boolean inialiseConnection() {
-        try {
-            serverSocket = new DatagramSocket(port);
-            reciveMsg();
+    public void inialiseConnection() {
 
-            if (JsonHandler.searchJSON(messages.peakMessage().getMsg(), "message").equals("INIT")) {
-                sendMsg(JsonHandler.generateESPCommand("INIT"));
+        do {
+            try {
+                serverSocket = new DatagramSocket(port);
+                reciveMsg();
 
-                return true;
+                espSeq = Integer.parseInt(JsonHandler.searchJSON(messages.peakMessage().getMsg(), "sequence_number"));
+    
+                if (JsonHandler.searchJSON(messages.peakMessage().getMsg(), "message").equals("INIT")) {
+                    sendMsg(JsonHandler.generateESPCommand("INIT"));
+                }
+
+            } catch (Exception sockException) {
+                System.out.println("Waiting for ESP connection");
             }
+    
+        } while (isConnected() == false);
 
-            return false;
 
-        } catch (Exception sockException) {
-            System.out.println();
-            return false;
-        }
+
+        Random rand = new Random();
+        JsonHandler.setEspSeq(100 + rand.nextInt(100));
+
     }
 
 
     public boolean isConnected() {
-        // TODO Auto-generated method stub
-        return false;
+        //TODO I wan my notebook
     }
 
     public void reciveMsg() {

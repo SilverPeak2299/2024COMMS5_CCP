@@ -11,6 +11,10 @@ import org.json.simple.parser.JSONParser;
  */
 public class jsonHandler {
     String id;
+
+    int ccpMcpSeq;
+    int ccpEspSeq;
+
     JSONParser parser;
 
     jsonHandler(int id) {
@@ -18,10 +22,6 @@ public class jsonHandler {
         parser = new JSONParser();
     }
 
-   private String timestamp() {
-    //TODO Impliment propper timestamp generation
-    return "";
-   }
 
     // java throws a fit cause the JSONobject is an extension of hashmap
     @SuppressWarnings("unchecked")
@@ -31,8 +31,9 @@ public class jsonHandler {
         command.put("client_type", "ccp");
         command.put("message", cmd);
         command.put("client_id", id);
-        command.put("timestamp", timestamp());
+        command.put("sequence_number", ccpMcpSeq);
 
+        ccpMcpSeq += 1;
         return command.toJSONString();
     }
 
@@ -41,7 +42,9 @@ public class jsonHandler {
     public String generateESPCommand(String cmd) {
         JSONObject command = new JSONObject();
         command.put("message", cmd);
+        command.put("sequence_number", ccpEspSeq);
 
+        ccpEspSeq += 1;
         return command.toJSONString();
     }
 
@@ -59,4 +62,11 @@ public class jsonHandler {
         return (String) msg.get(key);
     }
 
+    public void setMcpSeq(int mcpSeq) {
+        this.ccpMcpSeq = mcpSeq;
+    }
+
+    public void setEspSeq(int espSeq) {
+        this.ccpEspSeq = espSeq;
+    }
 }
