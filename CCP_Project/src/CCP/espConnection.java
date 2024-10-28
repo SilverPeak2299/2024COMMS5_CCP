@@ -14,6 +14,8 @@ public class espConnection{
     boolean connection;
     int msgsWithoutReply = 0;
 
+    String status = "";
+
 
     DatagramPacket recivePacket;
     DatagramPacket sendPacket;
@@ -41,6 +43,7 @@ public class espConnection{
     
                 if (jsonHandler.searchJSON(messages.peakMessage().getMsg(), "message").equals("INIT")) {
                     sendMsg(JsonHandler.generateESPCommand("INIT"));
+                    sendMsg(JsonHandler.generateESPCommand("STOPC"));
                 }
 
             } catch (Exception sockException) {

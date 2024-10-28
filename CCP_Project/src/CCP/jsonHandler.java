@@ -28,18 +28,48 @@ public class jsonHandler {
     public String generateMCPCommand(String cmd) {
         JSONObject command = new JSONObject();
     
-        command.put("client_type", "ccp");
-        command.put("message", cmd);
-        command.put("client_id", id);
-        command.put("sequence_number", ccpMcpSeq);
+        switch (cmd) {
+            case "STAT":
+                command.put("status", command);
+                break;
+        
+            default:
+                command.put("client_type", "ccp");
+                command.put("message", cmd);
+                command.put("client_id", id);
+                command.put("sequence_number", ccpMcpSeq);
+                break;
+        }
+
+
+
+
 
         ccpMcpSeq += 1;
         return command.toJSONString();
     }
 
+
+    @SuppressWarnings("unchecked")
+    public String generateMCPCommand(String cmd, espConnection espCon) {
+        JSONObject command = new JSONObject();
+
+        command.put("client_type", "ccp");
+        command.put("message", cmd);
+        command.put("client_id", id);
+        command.put("sequence_number", ccpMcpSeq);
+        command.put("status", espCon.status);
+        
+        ccpMcpSeq += 1;
+        return command.toJSONString();
+    }
+
+
+
     // java throws a fit cause the JSONobject is an extension of hashmap
     @SuppressWarnings("unchecked")
     public String generateESPCommand(String cmd) {
+        
         JSONObject command = new JSONObject();
         command.put("message", cmd);
         command.put("sequence_number", ccpEspSeq);
@@ -47,6 +77,20 @@ public class jsonHandler {
         ccpEspSeq += 1;
         return command.toJSONString();
     }
+
+    @SuppressWarnings("unchecked")
+    public String generateESPCommand(String cmd, espConnection espCon) {
+        espCon.status = cmd;
+
+        JSONObject command = new JSONObject();
+        command.put("message", cmd);
+        command.put("sequence_number", ccpEspSeq);
+
+        ccpEspSeq += 1;
+        return command.toJSONString();
+    }
+
+
 
     JSONObject convertString(String msg) {
         try {

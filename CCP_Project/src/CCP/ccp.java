@@ -11,9 +11,10 @@ public class ccp {
     static boolean running = true;
     static messageQueue mcpMsgs;
     static messageQueue espMsgs;
+    static connectionManager conManager;
 
     public static void main(String[] args) {
-        connectionManager conManager = new connectionManager(id);
+        conManager = new connectionManager(id);
         mcpMsgs = conManager.getMcpMessages();
         espMsgs = conManager.getEspMessages();
 
@@ -34,50 +35,42 @@ public class ccp {
         String msg =  jsonHandler.searchJSON(mcpMsgs.peakMessage().getMsg() , "message");
 
         if (msg.equals("STRQ")) {
+            conManager.mcpStat();
 
         } else if (msg.equals("EXEC")) {
             String action = jsonHandler.searchJSON(mcpMsgs.peakMessage().getMsg() , "action");
+            conManager.mcpAckExec();
 
-            switch ("action") {
+            switch (action) {
                 case "STOPC":
+                    conManager.espExec(action);
                     break;
 
                 case "STOPO":
+                    conManager.espExec(action);
                     break;
-                
+            
                 case "FLOWC":
+                    conManager.espExec(action);
                     break;
-                
+            
                 case "FFASTC":
+                    conManager.espExec(action);
                     break;
 
                 case "RSLOWC":
+                    conManager.espExec(action);
                     break;
-                
+            
                 case "DISCONNECT":
+                    conManager.espExec(action);
                     break;
     
                 default:
-                    System.out.println("Wrong Action code");
+                    System.out.println("Wrong Action Code");
                     break;
             }
-        }
-       
-        
-        
-        
-        switch (msg) {
-            case "STRQ":
-                
-                break;
-
-            case "EXEC":
-                
-                break;
-
-            default:
-                break;
-        }
+        }  
     }
     
 }

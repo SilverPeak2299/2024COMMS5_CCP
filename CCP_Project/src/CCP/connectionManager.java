@@ -21,7 +21,10 @@ public class connectionManager {
 
     void enforeceConnection () {
     // Checking conenctions
-        if (!espCon.isConnected()) { espCon.inialiseConnection(); }
+        if (!espCon.isConnected()) {
+            espCon.inialiseConnection();
+            espCon.status = "ERR";
+        }
 
         if (!mcpCon.isConnected()) { mcpCon.inialiseConnection(); }
     }
@@ -40,5 +43,15 @@ public class connectionManager {
         return espCon.messages;
     }
 
+    void mcpAckExec() {
+        mcpCon.sendMsg(JsonHandler.generateMCPCommand("AKEX"));
+    }
 
+    void mcpStat() {
+        mcpCon.sendMsg(JsonHandler.generateMCPCommand("STAT", espCon));
+    }
+
+    void espExec(String cmd) {
+        espCon.sendMsg(JsonHandler.generateMCPCommand(cmd, espCon));
+    }
 }
