@@ -41,10 +41,6 @@ public class jsonHandler {
                 break;
         }
 
-
-
-
-
         ccpMcpSeq += 1;
         return command.toJSONString();
     }
