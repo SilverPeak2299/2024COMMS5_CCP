@@ -42,8 +42,10 @@ public class espConnection{
                 espSeq = Integer.parseInt(jsonHandler.searchJSON(messages.peakMessage().getMsg(), "sequence_number"));
     
                 if (jsonHandler.searchJSON(messages.peakMessage().getMsg(), "message").equals("INIT")) {
+                    System.out.println("Recived INIT");
                     sendMsg(JsonHandler.generateESPCommand("INIT"));
                     sendMsg(JsonHandler.generateESPCommand("STOPC"));
+                    connection = true;
                 }
 
             } catch (Exception sockException) {
