@@ -26,7 +26,7 @@ public class connectionManager {
             espCon.status = "ERR";
         }
 
-        if (!mcpCon.isConnected()) { mcpCon.inialiseConnection(); }
+       // if (!mcpCon.isConnected()) { mcpCon.inialiseConnection(); }
     }
 
     //TODO: check if there actually exists a message

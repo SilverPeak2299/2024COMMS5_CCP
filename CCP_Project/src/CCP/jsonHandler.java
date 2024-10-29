@@ -89,6 +89,18 @@ public class jsonHandler {
         ccpEspSeq += 1;
         return command.toJSONString();
     }
+    
+    @SuppressWarnings("unchecked")
+    public String fabricateMcpMsg(String cmd) {
+
+        JSONObject command = new JSONObject();
+        command.put("message", cmd);
+        command.put("sequence_number", ccpEspSeq);
+
+        ccpEspSeq += 1;
+        return command.toJSONString();
+    }
+
 
 
 

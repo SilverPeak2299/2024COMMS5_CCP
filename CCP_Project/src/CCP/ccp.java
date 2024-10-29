@@ -1,6 +1,7 @@
 package CCP;
 import java.io.*;
 import java.util.logging.*;
+import java.util.stream.Collectors;
 
 /**
  * ccp
@@ -21,14 +22,15 @@ public class ccp {
         while (running) {
             conManager.enforeceConnection();
 
-            conManager.checkMcpMessages();
-            
-            processMcpMsg();
-
+            //conManager.checkMcpMessages();
+            conManager.espExec(getInput());
         }
     }
 
-
+    static String getInput() {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        return reader.lines().collect(Collectors.joining("\n"));
+    }
 
 
     static void processMcpMsg() {
