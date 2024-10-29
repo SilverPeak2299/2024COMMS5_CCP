@@ -35,6 +35,11 @@ public class connectionManager {
         return true;
     }
 
+    boolean checkEspMessages() {
+        espCon.reciveMsg();
+        return true;
+    }
+
     messageQueue getMcpMessages() {
         return mcpCon.messages;
     }

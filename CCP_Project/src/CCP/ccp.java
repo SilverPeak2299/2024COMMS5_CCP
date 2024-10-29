@@ -22,9 +22,10 @@ public class ccp {
             conManager.enforeceConnection();
 
             conManager.checkMcpMessages();
-            
             processMcpMsg();
 
+            conManager.checkEspMessages();
+            processEspMsg();
         }
     }
 
@@ -71,6 +72,16 @@ public class ccp {
                     break;
             }
         }  
+    }
+
+
+    static void processEspMsg() {
+        String msg =  jsonHandler.searchJSON(espMsgs.peakMessage().getMsg() , "message");
+
+            if (msg.equals("STAT")) {
+                conManager.espCon.status = jsonHandler.searchJSON(espMsgs.peakMessage().getMsg() , "status");
+                conManager.mcpStat();
+            }
     }
     
 }
